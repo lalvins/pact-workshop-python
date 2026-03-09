@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(.venv/bin/python -c \":*)",
-      "Bash(make test-contract)",
-      "Bash(/Users/luisalvins/Projects/pact-workshop-python/product-provider-service/.venv/bin/python -c \":*)"
-    ]
-  }
-}
