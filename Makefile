@@ -18,14 +18,14 @@ install-provider:
 
 install-provider-dev: install-provider
 	@echo "Installing provider dev dependencies (pact-python, pytest)..."
-	cd $(PROVIDER_DIR) && .venv/bin/pip install "pact-python>=2.2.0" pytest
+	cd $(PROVIDER_DIR) && .venv/bin/pip install "pact-python>=2.2.0,<3.0.0" pytest
 
 install-consumer:
 	@echo "Creating consumer venv and installing dependencies..."
 	cd $(CONSUMER_DIR) && $(PYTHON) -m venv .venv
 	cd $(CONSUMER_DIR) && .venv/bin/pip install --quiet --upgrade pip
 	cd $(CONSUMER_DIR) && .venv/bin/pip install fastapi "uvicorn[standard]" httpx
-	cd $(CONSUMER_DIR) && .venv/bin/pip install "pact-python>=2.2.0" pytest
+	cd $(CONSUMER_DIR) && .venv/bin/pip install "pact-python>=2.2.0,<3.0.0" pytest
 
 # ── run ───────────────────────────────────────────────────────────────────────
 

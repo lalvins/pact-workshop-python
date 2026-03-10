@@ -42,6 +42,10 @@ async def _setup(state: str, repository: ProductRepositoryPort) -> None:
         # InMemoryProductRepository is pre-seeded with products 1 & 2 — no action needed.
         pass
 
+    elif state == "provider accepts new products":
+        # Provider should always accept new products — no setup needed.
+        pass
+
     # Add future state handlers here, e.g.:
     # elif state == "no products exist":
     #     for product in await repository.get_all():

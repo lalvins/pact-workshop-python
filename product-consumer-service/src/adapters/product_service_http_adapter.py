@@ -19,3 +19,14 @@ class ProductServiceHttpAdapter(ProductServicePort):
         response.raise_for_status()
         data = response.json()
         return Product(id=data["id"], name=data["name"], price=data["price"])
+
+    async def create_product(self, name: str, price: float) -> Product:
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                f"{self._base_url}/products",
+                json={"name": name, "price": price},
+            )
+
+        response.raise_for_status()
+        data = response.json()
+        return Product(id=data["id"], name=data["name"], price=data["price"])

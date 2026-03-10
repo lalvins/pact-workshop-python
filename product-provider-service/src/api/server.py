@@ -51,7 +51,7 @@ def create_app() -> FastAPI:
         repository: Annotated[ProductRepositoryPort, Depends(get_repository)],
     ):
         product = await repository.create(name=body.name, price=body.price)
-        return {"id": product.id, "name": product.name, "price": product.price}
+        return {"id": product.id, "newName": product.name, "price": product.price}
 
     @app.put("/products/{product_id}")
     async def update_product(
