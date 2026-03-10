@@ -56,15 +56,7 @@ cd pact-workshop-python
 make install
 ```
 
-This creates a `.venv` inside each service directory and installs all required packages (including `pact-python`, `pytest`, `fastapi`, `uvicorn`, and `httpx`).
-
-For provider dev dependencies (required for running provider verification tests), run:
-
-```bash
-make install-provider-dev
-```
-
-> `make install` already covers the consumer. `install-provider-dev` adds `pact-python` and `pytest` to the provider's environment on top of the base install.
+This creates a `.venv` inside each service directory and installs everything needed to run both services and all tests (`pact-python`, `pytest`, `fastapi`, `uvicorn`, `httpx`).
 
 ---
 

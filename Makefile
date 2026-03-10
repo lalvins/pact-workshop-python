@@ -8,7 +8,7 @@ PYTHON       = python3
 
 # ── install ────────────────────────────────────────────────────────────────────
 
-install: install-provider install-consumer
+install: install-provider-dev install-consumer
 
 install-provider:
 	@echo "Creating provider venv and installing dependencies..."
