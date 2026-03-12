@@ -44,7 +44,7 @@ start-consumer:
 	@echo "Starting Product Consumer on http://localhost:3000"
 	cd $(CONSUMER_DIR) && PYTHONPATH=src .venv/bin/python src/api/server.py
 
-# ── docker ────────────────────────────────────────────────────────────────────
+# ── docker run (local) ──────────────────────────────────────────────────────────
 
 docker-build:
 	@echo "Building Docker images..."

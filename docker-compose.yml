@@ -13,5 +13,7 @@ services:
       - "3000:3000"
     volumes:
       - ./pacts:/workspace/pacts
+    environment:
+      - PROVIDER_URL=http://provider:3001
     depends_on:
       - provider
