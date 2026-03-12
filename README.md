@@ -89,12 +89,14 @@ If you want to explore the APIs manually using `curl` or Postman, you can start 
 make start          # starts both provider (port 3001) and consumer (port 3000) via Docker
 ```
 
-Or individually:
+Or start a single service via Docker:
 
 ```bash
-make start-provider   # provider with SQLite, persists data in products.db
-make start-consumer   # consumer, connects to http://localhost:3001
+docker compose up provider   # provider only (port 3001)
+docker compose up consumer   # consumer only (port 3000)
 ```
+
+> `make start-provider` / `make start-consumer` are local-Python alternatives — they require `make install` first.
 
 Then try:
 
