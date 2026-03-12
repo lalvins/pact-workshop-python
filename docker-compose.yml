@@ -1,0 +1,17 @@
+services:
+  provider:
+    build: ./product-provider-service
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./pacts:/workspace/pacts
+      - ./products.db:/workspace/products.db
+
+  consumer:
+    build: ./product-consumer-service
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./pacts:/workspace/pacts
+    depends_on:
+      - provider
