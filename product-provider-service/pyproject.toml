@@ -10,7 +10,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "pact-python>=2.2.0",
+    "pact-python>=2.2.0,<3.0.0",
     "pytest>=8.0.0",
 ]
 

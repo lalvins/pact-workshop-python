@@ -48,7 +48,17 @@ python3 --version
 
 ## Setup
 
-Clone the repository and install all dependencies for both services:
+Clone the repository and install all dependencies for both services.
+
+**Option A — uv (recommended):**
+
+```bash
+git clone <repository-url>
+cd pact-workshop-python
+uv sync --all-extras
+```
+
+**Option B — make:**
 
 ```bash
 git clone <repository-url>
@@ -56,7 +66,7 @@ cd pact-workshop-python
 make install
 ```
 
-This creates a `.venv` inside each service directory and installs everything needed to run both services and all tests (`pact-python`, `pytest`, `fastapi`, `uvicorn`, `httpx`).
+Both options install everything needed to run both services and all tests (`pact-python`, `pytest`, `fastapi`, `uvicorn`, `httpx`).
 
 ---
 
@@ -111,14 +121,37 @@ This is purely optional and has no effect on the contract tests.
 
 ---
 
+## Docker (alternative)
+
+If you prefer not to install Python locally, Docker is available as an alternative.
+
+```bash
+make docker-build                       # build images — rerun when pyproject.toml changes
+make docker-start                       # start both services (auto-reloads on src/ changes)
+make docker-test-contract               # run consumer tests → generates pact file
+make docker-test-provider-verification  # run provider verification (requires pact file above)
+make docker-stop                        # stop containers
+make docker-clean                       # stop containers and remove images
+```
+
+> Run `docker-test-contract` before `docker-test-provider-verification` — the pact file must exist first.
+
+> `src/` changes are picked up automatically without a rebuild. Only `pyproject.toml` changes require `make docker-build`.
+
+> Consumer and provider services communicate via Docker's internal network — no extra configuration needed.
+
+---
+
 ## Project structure
 
 ```
 pact-workshop-python/
 ├── Makefile
+├── docker-compose.yml
 ├── pyproject.toml                     # UV workspace config
 ├── pacts/                             # Generated pact contracts
 ├── product-consumer-service/
+│   ├── Dockerfile
 │   ├── src/
 │   │   ├── api/                       # FastAPI routes (port 3000)
 │   │   ├── adapters/                  # HTTP adapter calling the provider
@@ -128,6 +161,7 @@ pact-workshop-python/
 │   └── tests/
 │       └── contract/                  # Pact consumer tests
 └── product-provider-service/
+    ├── Dockerfile
     ├── src/
     │   ├── api/                       # FastAPI routes (port 3001)
     │   ├── adapters/                  # SQLite & in-memory repositories
@@ -145,11 +179,31 @@ pact-workshop-python/
 
 | Target | Description |
 |--------|-------------|
-| `make install` | Install dependencies for both services |
+| `make install` | Install dependencies for both services (pip) |
 | `make install-provider-dev` | Install provider + dev dependencies (pact, pytest) |
-| `make start` | Start provider and consumer in parallel |
+| `make start` | Start provider and consumer in parallel (local) |
 | `make start-provider` | Start provider in SQLite mode (port 3001) |
 | `make start-provider-pact` | Start provider in Pact/in-memory mode (port 3001) |
 | `make start-consumer` | Start consumer (port 3000) |
 | `make test-contract` | Run consumer contract tests → generates pact file |
 | `make test-provider-verification` | Run provider verification against pact file |
+| `make docker-build` | Build Docker images for both services |
+| `make docker-start` | Start both services via Docker |
+| `make docker-stop` | Stop and remove Docker containers |
+| `make docker-clean` | Stop containers and remove images |
+| `make docker-test-contract` | Run consumer contract tests in Docker |
+| `make docker-test-provider-verification` | Run provider verification in Docker |
+
+---
+
+## Troubleshooting
+
+| Symptom | Fix |
+|---|---|
+| `pact.v3` import error | Ensure `pact-python>=2.2.0,<3.0.0` is installed — run `make install` |
+| Port 3000 / 3001 already in use | Kill the process: `lsof -ti:3001 \| xargs kill` |
+| Provider verification fails with "pact file not found" | Run `make test-contract` first — the pact JSON must exist before verification |
+| `/_pact/provider_states` returns 404 on `make start` | `make start` runs production mode (SQLite). Use `make start-provider-pact` for Pact mode |
+| `docker compose` not found | Upgrade to Docker Desktop ≥ 4.x (ships Compose v2 as a plugin) |
+| Provider fails to start — missing `products.db` | Run `touch products.db` in the repo root before `docker compose up` (handled automatically by `make docker-start`) |
+| Docker image build fails downloading pact-python | `pact-python >= 2.2.0` fetches a Rust FFI binary (~50 MB). Retry on a stable connection |

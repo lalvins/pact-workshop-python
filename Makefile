@@ -4,9 +4,12 @@ PYTHON       = python3
 
 .PHONY: install install-provider install-consumer install-provider-dev \
         start start-provider start-provider-pact start-consumer \
-        test-contract test-provider-verification
+        test-contract test-provider-verification \
+        docker-build docker-start docker-stop docker-clean \
+        docker-test-contract docker-test-provider-verification \
+        clean clean-all
 
-# ── install ────────────────────────────────────────────────────────────────────
+# ── install (local) ────────────────────────────────────────────────────────────
 
 install: install-provider-dev install-consumer
 
@@ -27,7 +30,7 @@ install-consumer:
 	cd $(CONSUMER_DIR) && .venv/bin/pip install fastapi "uvicorn[standard]" httpx
 	cd $(CONSUMER_DIR) && .venv/bin/pip install "pact-python>=2.2.0,<3.0.0" pytest
 
-# ── run ───────────────────────────────────────────────────────────────────────
+# ── run (local) ───────────────────────────────────────────────────────────────
 
 start-provider:
 	@echo "Starting Product Provider (SQLite mode) on http://localhost:3001"
@@ -44,7 +47,7 @@ start-consumer:
 start:
 	@$(MAKE) start-provider & $(MAKE) start-consumer & wait
 
-# ── test ──────────────────────────────────────────────────────────────────────
+# ── test (local) ──────────────────────────────────────────────────────────────
 
 test-contract:
 	@echo "Running Pact consumer contract tests (generates pact file)..."
@@ -53,3 +56,31 @@ test-contract:
 test-provider-verification:
 	@echo "Running Pact provider verification..."
 	cd $(PROVIDER_DIR) && PYTHONPATH=src:tests/provider .venv/bin/pytest tests/provider -v
+
+# ── docker ────────────────────────────────────────────────────────────────────
+
+docker-build:
+	@echo "Building Docker images..."
+	docker compose build
+
+docker-start:
+	@echo "Starting services via Docker..."
+	@touch products.db
+	docker compose up
+
+docker-stop:
+	docker compose down
+
+docker-clean:
+	@echo "Removing Docker images..."
+	docker compose down --rmi all
+
+docker-test-contract:
+	@echo "Running consumer contract tests in Docker (generates pact file)..."
+	@mkdir -p pacts
+	docker compose run --rm --no-deps consumer pytest tests/contract -v
+
+docker-test-provider-verification:
+	@echo "Running provider verification tests in Docker..."
+	docker compose run --rm --no-deps provider \
+	  sh -c "PYTHONPATH=/workspace/product-provider-service/src:/workspace/product-provider-service/tests/provider pytest tests/provider -v"
