@@ -50,16 +50,6 @@ python3 --version
 
 Clone the repository and install all dependencies for both services.
 
-**Option A — uv (recommended):**
-
-```bash
-git clone <repository-url>
-cd pact-workshop-python
-uv sync --all-extras
-```
-
-**Option B — make:**
-
 ```bash
 git clone <repository-url>
 cd pact-workshop-python
@@ -171,7 +161,7 @@ make docker-clean                       # stop containers and remove images
 pact-workshop-python/
 ├── Makefile
 ├── docker-compose.yml
-├── pyproject.toml                     # UV workspace config
+├── pyproject.toml                     
 ├── pacts/                             # Generated pact contracts
 ├── product-consumer-service/
 │   ├── Dockerfile
