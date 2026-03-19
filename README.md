@@ -44,6 +44,33 @@ Check your Python version:
 python3 --version
 ```
 
+If you don't have Python 3.11+ installed, you can use [pyenv](https://github.com/pyenv/pyenv) to install and manage Python versions.
+
+**Install pyenv:**
+
+```bash
+# macOS (Homebrew)
+brew install pyenv
+
+# Linux
+curl https://pyenv.run | bash
+```
+
+After installing, add pyenv to your shell (add these lines to `~/.zshrc` or `~/.bashrc`):
+
+```bash
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+```
+
+Restart your shell, then install and set Python 3.11:
+
+```bash
+pyenv install 3.11
+pyenv local 3.11   # sets the version for this project only
+```
+
 ---
 
 ## Setup
