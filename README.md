@@ -94,6 +94,29 @@ make test-provider-verification
 
 The test harness starts the provider internally in **Pact mode** (in-memory database + state manager), runs the verification, and shuts it down. There is no need to start the provider service beforehand.
 
+
+### Good news!!!!!
+If you reached this point and you have 2 green contract tests for the `make test-contract` command:
+```
+collected 2 items                                                                                                                                                             
+tests/contract/test_get_product_pact.py::TestProductServiceHttpAdapterPactContract::test_returns_product_domain_object_when_provider_responds PASSED                    [ 50%]
+tests/contract/test_get_product_pact.py::TestProductServiceHttpAdapterPactContract::test_creates_product_when_provider_accepts_post PASSED                              [100%]
+
+============================================================================== 2 passed in 0.79s ==============================================================================
+```
+
+and 1 for the `make test-provider-verification`:
+
+```
+collected 1 item                                                                                                                                                              
+
+tests/provider/test_provider_verification.py::TestProviderVerification::test_provider_honours_contract_with_consumer PASSED                                             [100%]
+
+============================================================================== 1 passed in 2.45s ==============================================================================
+```
+
+then you are ready to do the exercises!
+
 ---
 
 ## Experimenting with the services (optional)
