@@ -13,4 +13,4 @@ EXPOSE 3001
 
 ENV PYTHONPATH=/workspace/product-provider-service/src
 
-CMD ["python", "src/api/server.py"]
+CMD ["uvicorn", "api.server:create_app", "--host", "0.0.0.0", "--port", "3001", "--reload", "--factory"]

@@ -13,4 +13,4 @@ EXPOSE 3000
 
 ENV PYTHONPATH=/workspace/product-consumer-service/src
 
-CMD ["python", "src/api/server.py"]
+CMD ["uvicorn", "api.server:app", "--host", "0.0.0.0", "--port", "3000", "--reload"]

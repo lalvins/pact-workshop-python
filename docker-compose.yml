@@ -6,6 +6,8 @@ services:
     volumes:
       - ./pacts:/workspace/pacts
       - ./products.db:/workspace/products.db
+      - ./product-provider-service/src:/workspace/product-provider-service/src
+      - ./product-provider-service/tests:/workspace/product-provider-service/tests
 
   consumer:
     build: ./product-consumer-service
@@ -13,6 +15,8 @@ services:
       - "3000:3000"
     volumes:
       - ./pacts:/workspace/pacts
+      - ./product-consumer-service/src:/workspace/product-consumer-service/src
+      - ./product-consumer-service/tests:/workspace/product-consumer-service/tests
     environment:
       - PROVIDER_URL=http://provider:3001
     depends_on:

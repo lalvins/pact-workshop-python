@@ -126,13 +126,17 @@ This is purely optional and has no effect on the contract tests.
 If you prefer not to install Python locally, Docker is available as an alternative.
 
 ```bash
-make docker-build                       # build images (first time only, ~2 min)
-make docker-start                       # start both services
-make docker-test-contract               # run consumer tests in Docker
-make docker-test-provider-verification  # run provider verification in Docker
+make docker-build                       # build images — rerun when pyproject.toml changes
+make docker-start                       # start both services (auto-reloads on src/ changes)
+make docker-test-contract               # run consumer tests → generates pact file
+make docker-test-provider-verification  # run provider verification (requires pact file above)
 make docker-stop                        # stop containers
 make docker-clean                       # stop containers and remove images
 ```
+
+> Run `docker-test-contract` before `docker-test-provider-verification` — the pact file must exist first.
+
+> `src/` changes are picked up automatically without a rebuild. Only `pyproject.toml` changes require `make docker-build`.
 
 > Consumer and provider services communicate via Docker's internal network — no extra configuration needed.
 
@@ -201,4 +205,5 @@ pact-workshop-python/
 | Provider verification fails with "pact file not found" | Run `make test-contract` first — the pact JSON must exist before verification |
 | `/_pact/provider_states` returns 404 on `make start` | `make start` runs production mode (SQLite). Use `make start-provider-pact` for Pact mode |
 | `docker compose` not found | Upgrade to Docker Desktop ≥ 4.x (ships Compose v2 as a plugin) |
+| Provider fails to start — missing `products.db` | Run `touch products.db` in the repo root before `docker compose up` (handled automatically by `make docker-start`) |
 | Docker image build fails downloading pact-python | `pact-python >= 2.2.0` fetches a Rust FFI binary (~50 MB). Retry on a stable connection |
